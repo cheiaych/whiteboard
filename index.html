@@ -7,6 +7,35 @@
 
     <body>
         <!-- This is a comment -->
+        
         <h1>Hello World!</h1>
+        <div id = "note" style="width:200px" contenteditable></div>
+
+        <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+        <script>
+            const fs = new Filer.FileSystem();
+
+            window.addEventListener('DOMContentLoaded', (event) => {
+                fs.readFile('/note', 'utf8', function(err, data) {
+                    if (err)
+                    {
+                        document.getElementById("note").innerHTML = "Welcome to whiteboard!";
+                    }
+                    else
+                    {
+                        document.getElementById("note").innerHTML = data;
+                    }
+                })
+            })
+
+            var interval = setInterval(() => {
+                fs.writeFile("/note",document.getElementById("note").innerHTML, function (err) {
+                    alert(err);
+                })
+            }, 5000);
+
+        </script>
     </body>
 </html>
+
+
