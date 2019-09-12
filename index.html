@@ -19,7 +19,7 @@
                 fs.readFile('/note', 'utf8', function(err, data) {
                     if (err)
                     {
-                        document.getElementById("note").innerHTML = "Welcome to whiteboard!";
+                        document.getElementById("note").innerHTML = "Welcome to Whiteboard!";
                     }
                     else
                     {
@@ -30,9 +30,12 @@
 
             var interval = setInterval(() => {
                 fs.writeFile("/note",document.getElementById("note").innerHTML, function (err) {
-                    alert(err);
+                    if (err != null)
+                    {
+                        alert("Error in interval")
+                    }
                 })
-            }, 5000);
+            }, 10000);
 
         </script>
     </body>
