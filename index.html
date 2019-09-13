@@ -10,10 +10,14 @@
         
         <div style="text-align: center; background-color:rgb(0, 0, 0); color:white"><h1>Welcome to Whiteboard</h1></div>
 
-        <div id="note" style="width:200px" contenteditable>Type Here</div>
-
-        <p style="font-size: 20px">Press CTRL+S to save your note</p>
-        <p id="wordCount"># of words:</p>
+        <div id="note" style="width:200px" contenteditable></div>
+        <br>
+        <b id="wordCount" style="font-size: 16px"># of words:</b>
+        <br>
+        <br>
+        <b id="isSaved" style="font-size: 16px"></b>
+        <br>
+        <b style="font-size: 16px">Press CTRL+S to save your note</b>
 
         <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
         <!--<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>-->
@@ -35,11 +39,13 @@
             const area = document.getElementById("note");
             Countable.on(area, (counter) => {
                 console.log(counter)
+
                 document.querySelector("#wordCount").innerHTML = ("# of words: " + counter.words)
             });
 
             $(document).keydown(function(e){
-            if(e.ctrlKey && e.keyCode == 83){
+                document.querySelector("#isSaved").innerHTML = "Unsaved changes"
+                if(e.ctrlKey && e.keyCode == 83){
                     e.preventDefault();
                     saveData();
                 }
@@ -73,6 +79,7 @@
             function saveData()
             {
                 console.log("Data Saved")
+                document.querySelector("#isSaved").innerHTML = "Saved";
                 fs.writeFile("/note",document.querySelector('#note').innerHTML, function (err) {
                     if (err != null)
                     {
