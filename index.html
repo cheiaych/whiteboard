@@ -8,34 +8,78 @@
     <body>
         <!-- This is a comment -->
         
-        <h1>Hello World!</h1>
-        <div id = "note" style="width:200px" contenteditable></div>
+        <div style="text-align: center; background-color:rgb(0, 0, 0); color:white"><h1>Welcome to Whiteboard</h1></div>
+
+        <div id="note" style="width:200px" contenteditable></div>
+
+        <p style="font-size: 20px">Press CTRL+S to save your note</p>
+        <p id="wordCount"># of words:</p>
 
         <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+        <!--<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="countable.js"></script>
         <script>
+
+            /*hotkeys('ctrl+s', function (event, handler) {
+                switch (handler.key) {
+                    case 'ctrl+s':
+                        handler.preventDefault();
+                        saveData();
+                        break;
+                    default:
+                        break;
+                }
+            })*/
+
+            const area = document.getElementById("note");
+            Countable.on(area, (counter) => {
+                console.log(counter)
+                document.querySelector("#wordCount").innerHTML = ("# of words: " + counter.words)
+            });
+
+            $(document).keydown(function(e){
+            if(e.ctrlKey && e.keyCode == 83){
+                    e.preventDefault();
+                    saveData();
+                }
+            });
+
             const fs = new Filer.FileSystem();
 
             window.addEventListener('DOMContentLoaded', (event) => {
+                readData();
+            })
+
+            /*var interval = setInterval(() => {
+                saveData();
+            }, 10000);*/
+
+            function readData()
+            {
+                console.log("Data read")
                 fs.readFile('/note', 'utf8', function(err, data) {
                     if (err)
                     {
-                        document.getElementById("note").innerHTML = "Welcome to Whiteboard!";
+                        document.querySelector('#note').innerHTML = "Enter text here";
                     }
                     else
                     {
-                        document.getElementById("note").innerHTML = data;
+                        document.querySelector('#note').innerHTML = data;
                     }
                 })
-            })
+            }
 
-            var interval = setInterval(() => {
-                fs.writeFile("/note",document.getElementById("note").innerHTML, function (err) {
+            function saveData()
+            {
+                console.log("Data Saved")
+                fs.writeFile("/note",document.querySelector('#note').innerHTML, function (err) {
                     if (err != null)
                     {
                         alert("Error in interval")
                     }
                 })
-            }, 10000);
+            }
 
         </script>
     </body>
